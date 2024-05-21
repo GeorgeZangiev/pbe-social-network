@@ -1,43 +1,39 @@
-image: openjdk:11.0.16-jdk
+image: maven:latest
 
 stages:
+  - build
   - test
+  - package
   - deploy
 
-before_script:
-  - PATH=/opt/apache-maven-3.8.6/bin:/usr/local/openjdk-11/bin:$PATH
-  - JAVA_HOME=/usr/local/openjdk-11
-
-test-all:
-  stage: test
-  tags: [maven]
-  except:
-    - master
-    - main
+build-job:
+  stage: build
+  tags:
+    - docker
   script:
-    - mvn clean install
+    - echo "Maven compile started"
+    - "mvn compile"
 
-test-unit:
+
+test-job:
   stage: test
-  tags: [maven]
-  only:
-    - master
-    - main
+  tags:
+    - docker
   script:
-    - mvn clean package
-    - cp target/backend-social-network*.jar backend-social-network-${CI_COMMIT_SHA}.jar
-  artifacts:
-    name: backend-social-network
-    expire_in: 1 week
-    paths:
-      - backend-social-network-${CI_COMMIT_SHA}.jar
+    - echo "Maven test started"
+    - "mvn test"
 
-deploy:
+package-job:
+  stage: package
+  tags:
+    - docker
+  script:
+    - echo "Maven package started"
+    - "mvn package"
+
+deploy-job:
   stage: deploy
-  needs: [test-unit]
-  only:
-    - master
-    - main
+  tags:
+    - docker
   script:
-    - ls backend-social-network*.jar
-
+    - echo "Maven deploy started"

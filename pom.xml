@@ -16,7 +16,7 @@
 
     <properties>
         <java.version>11</java.version>
-        <lombok.version>1.18.12</lombok.version>
+        <lombok.version>1.18.28</lombok.version>
         <mapstruct.version>1.3.1.Final</mapstruct.version>
         <liquibase.propertyFile>${project.basedir}/src/main/resources/liquibase.properties</liquibase.propertyFile>
         <junit.version>5.6.0</junit.version>
